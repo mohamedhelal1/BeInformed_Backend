@@ -1,0 +1,19 @@
+{
+  "name": "beinformed_backend",
+  "version": "1.0.0",
+  "description": "a website for covid-19 related news ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohamedhelal1/BeInformed_Backend.git"
+  },
+  "author": "Mohamed Helal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mohamedhelal1/BeInformed_Backend/issues"
+  },
+  "homepage": "https://github.com/mohamedhelal1/BeInformed_Backend#readme"
+}
