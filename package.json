@@ -2,9 +2,10 @@
   "name": "beinformed_backend",
   "version": "1.0.0",
   "description": "a website for covid-19 related news ",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,18 @@
   "bugs": {
     "url": "https://github.com/mohamedhelal1/BeInformed_Backend/issues"
   },
-  "homepage": "https://github.com/mohamedhelal1/BeInformed_Backend#readme"
+  "homepage": "https://github.com/mohamedhelal1/BeInformed_Backend#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.7.4",
+    "express": "^4.17.1",
+    "helmet": "^3.22.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.7",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
 }
