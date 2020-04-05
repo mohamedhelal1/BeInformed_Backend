@@ -1,8 +1,11 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
-const EMAIL_REGEX = require('../Config').EMAIL_REGEX;
+const config = require('../Config');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
+const {OAuth2Client} = require('google-auth-library');
+const client = new OAuth2Client(config.clientID);
+const Article = require('../models/Article');
 //Register
 module.exports.register = (req,res,next) => {
     const { firstname,lastname, email, password, confirmPassword} = req.body;
@@ -27,7 +30,7 @@ module.exports.register = (req,res,next) => {
             data: null
         });
      }
-    if(!EMAIL_REGEX.test(email)){
+    if(!config.EMAIL_REGEX.test(email)){
         return res.status(422).json({
             err: null,
             msg:'Incorrect email format',
@@ -113,7 +116,7 @@ module.exports.login = (req,res,next) => {
             data: null
         });
      }
-    if(!EMAIL_REGEX.test(email)){
+    if(!config.EMAIL_REGEX.test(email)){
         return res.status(422).json({
             err: null,
             msg:'Incorrect email format',
@@ -131,7 +134,13 @@ module.exports.login = (req,res,next) => {
                 data: null
             });
         }
-        
+        if(!user.password){
+            return res.status(401).json({
+                err: null,
+                msg: 'please sign in with your google account and create a password',
+                data: null
+            });
+        }
         //hash password
         bcrypt.compare(password , user.password,(err,isMatch)=>{
             if(err) return next(err);
@@ -143,7 +152,111 @@ module.exports.login = (req,res,next) => {
                 });
             }
             var token = jwt.sign({user: user.toObject()},req.app.get('secret'),{expiresIn: '12h'});
-            res.status(200).json({ err: null, msg: 'logged in', data: token });
+            res.status(200).json({ err: null, msg: 'logged in', data: {token} });
+        });
+    });
+}
+
+module.exports.googlelogin=(req,res,next)=>{
+    client.verifyIdToken({
+        idToken: req.body.id_token,
+        audience: config.clientID
+    },
+    (err,loginTicket)=>{
+        if(err) {
+        console.log(err);
+            return next(err)
+        };
+        const { email, sub ,given_name, family_name} = loginTicket.payload;
+        User.findOne({ googleId: sub}, (err, user) => {
+            if(err)
+                return next(err);
+            if(user){
+                var token = jwt.sign({user: user.toObject()},req.app.get('secret'),{expiresIn: '12h'});
+                res.status(200).json({ err: null, msg: 'logged in', data: token });
+            }
+            else{
+                const newUser = new User({
+                    firstname : given_name,
+                    lastname : family_name,
+                    email : email,
+                    googleId : sub,
+                    readLater : []
+                });
+                // add user to Database
+                User.create(newUser,(err,user) =>{
+                    if (err)
+                        return next(err);
+                    var token = jwt.sign({user: user.toObject()},req.app.get('secret'),{expiresIn: '12h'});
+                    return res.status(201).json({ err: null, msg: 'logged in', data: {token} });
+                });
+            }
+        });
+    });
+}
+module.exports.togglereadlater= (req,res,next)=>{
+    if( !req.params.articleId)
+        return res.status(422).json({
+            err: null,
+            msg:
+                'there must be an articleId',
+            data: null
+    });
+    Article.findById({_id:req.params.articleId}).exec((err,article)=>{
+        if(err)
+            return next(err);
+        if(!article)
+            return res.status(404).json({
+                err: null,
+                msg:
+                    'article not found',
+                data: null
+             });
+        User.findById({_id:req.decodedToken.user._id},(err,user)=>{
+            if(err) 
+                return next(err)
+            if(!user.readLater.includes(article._id)){
+                User.updateOne({_id:req.decodedToken.user._id},{$push: {readLater:article._id}},
+                    (err)=>{
+                        if(err)
+                            return next(err);
+                        return res.status(200).json({
+                            err: null,
+                            msg: 'Article added',
+                            data: null
+                        });
+                    }
+                );
+            }
+            else{
+                User.updateOne({_id:req.decodedToken.user._id},{$pull: {readLater:article._id}},
+                    (err)=>{
+                        if(err)
+                            return next(err);
+                        return res.status(200).json({
+                            err: null,
+                            msg: 'Article removed',
+                            data: null
+                        });
+                    }
+                );
+            }
+        }); 
+    });
+}
+
+module.exports.getreadlater = (req,res,next)=>{
+    User.findById({_id:req.decodedToken.user._id},(err,user)=>{
+        if(err)
+            return next(err);
+        Article.find({_id:{$in:user.readLater}},(err,articles)=>{
+            if(err)
+                return next(err);
+            return res.status(200).json({
+                err: null,
+                msg: 'Articles retrieved successfully',
+                data: articles
+            });
         });
     });
 }

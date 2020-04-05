@@ -1,6 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const userCtrl = require('./controllers/user');
+const articleCtrl = require('./controllers/article')
 
 const router = express.Router();
 
@@ -10,7 +11,7 @@ var isAuthenticated = (req, res, next)=> {
     if (!token) {
         return res.status(401).json({
             error: null,
-            msg: 'You have to login first before you can access your lists.',
+            msg: 'You have to login first.',
             data: null
         });
     }
@@ -49,8 +50,14 @@ var isNotAuthenticated = (req, res, next) => {
 
 
 // user routes
-router.post('/user/register', isNotAuthenticated, userCtrl.register);
+router.post('/user/register', userCtrl.register);
 router.post('/user/login', isNotAuthenticated, userCtrl.login);
+router.post('/user/googlelogin', isNotAuthenticated, userCtrl.googlelogin);
+router.put('/user/togglereadlater/:articleId',isAuthenticated, userCtrl.togglereadlater);
+router.get('/user/getreadlater',isAuthenticated, userCtrl.getreadlater);
 
-
+// article routes
+router.get('/articles/:page',isNotAuthenticated, articleCtrl.getarticles);
+router.get('/articles/auth/:page',isAuthenticated, articleCtrl.authgetarticles);
+router.put('/articles/liketoggle/:articleId',isAuthenticated, articleCtrl.liketoggle);
 module.exports = router;

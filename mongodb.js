@@ -50,17 +50,15 @@ process.on('SIGTERM', ()=> {
 });
 
 //connect to Mongo
-mongoose.connect(dbUrl,{ useNewUrlParser : true})
+mongoose.set('useCreateIndex', true)
+mongoose.connect(dbUrl,{useUnifiedTopology: true,useNewUrlParser: true,})
 .then(() => console.log('MongoDB Connected......'))
 .catch( err=>{
-    console.error(err);
-        gracefulShutdown(function(err) {
-        if (err) {
-            console.error(err);
-        } 
-        else {
-            console.log('Could not connect to mongoDB');
-        }
-        process.exit(1);
-    });
+    if (err) {
+        console.log(err);
+    } 
+    else {
+        console.log('Could not connect to mongoDB');
+    }
+    process.exit(1);
 });

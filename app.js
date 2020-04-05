@@ -5,7 +5,7 @@ const compression = require('compression');
 const routes = require('./routes');
 const config = require('./Config');
 const app = express();
-
+require('./server/newsapi');
 //secret for authentication
 app.set('secret', config.SECRET);
 // Middleware to protect the server against common known security vulnerabilities

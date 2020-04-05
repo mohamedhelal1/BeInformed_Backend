@@ -1,31 +1,32 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 
-const UserSchema = new mongoose.Schema({
-    firstname : {
+const ArticleSchema = new mongoose.Schema({
+    sourceName : {
         type : String,
         required : true
     },
-    lastname : {
+    title : {
         type : String,
         required : true
     },
-    email : {
+    url : {
         type : String,
         required : true,
         unique : true
     },
-    password : {
+    urlToImage :{
         type : String
     },
-    googleId :{
-        type : String
+    date:{
+        type: Date,
+        required : true
     },
-    readLater:[{
-        type : String
+    likes:[{
+        type: String
     }]
 });
-UserSchema.plugin(mongoosePaginate);
-const User = mongoose.model('User' , UserSchema);
+ArticleSchema.plugin(mongoosePaginate);
+const Article = mongoose.model('Article' , ArticleSchema);
 
-module.exports = User;
+module.exports = Article;
