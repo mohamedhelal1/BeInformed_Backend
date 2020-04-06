@@ -1,0 +1,13 @@
+<app-article 
+*ngFor="let article of articles" 
+[article]="article">
+</app-article>
+
+<ul class="pagination pagination-lg">
+    <li   class="page-item" >
+    <a disabled="currentPage==1" class="page-link" (click)="previousPage()">&laquo;</a>
+    <li class="page-item" >
+    <a disabled="currentPage==pages"class="page-link" (click)="nextPage()">&raquo;</a>
+    </li>
+</ul>
+

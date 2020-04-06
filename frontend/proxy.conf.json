@@ -1,0 +1,13 @@
+{
+    "/user/": {
+        "target": "http://localhost:5000",
+        "secure": false,
+        "changeOrigin": true
+    } ,
+        "/article/": {
+            "target": "http://localhost:5000",
+            "secure": false,
+            "changeOrigin": true
+        }
+    
+}

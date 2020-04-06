@@ -1,0 +1,57 @@
+<!-- News jumbotron -->
+<div class="jumbotron text-center hoverable p-4">
+
+    <!-- Grid row -->
+    <div class="row">
+  
+      <!-- Grid column -->
+      <div class="col-md-7 offset-md-1 mx-3 my-5">
+  
+        <!-- Featured image -->
+        <div class="view overlay">
+          <img src="{{article.urlToImage}}" class="img-fluid" alt="Sample image for first version of blog listing">
+          <a>
+            <div class="mask rgba-white-slight"></div>
+          </a>
+        </div>
+  
+      </div>
+      <!-- Grid column -->
+  
+      <!-- Grid column -->
+      <div class="col-md-4 text-md-left ml-3 mt-3">
+  
+        <!-- Excerpt -->
+        <a href="#!" class="green-text">
+          <h6 class="h6 pb-1"><i class="fas fa-desktop pr-1"></i> Corona</h6>
+        </a>
+  
+        <h1 class="h4 mb-4">{{article.title}}</h1>
+  
+        <p class="mb-0">{{article.description}}</p>
+        <p class="font-weight-normal"> <a><strong>{{article.sourceName}}</strong></a></p>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        <div class="row">
+            <div>
+                <a class="btn btn-success" href="{{article.url}}">Read more</a>
+            </div>
+            &nbsp; &nbsp; &nbsp; &nbsp;
+            <div>
+                <a class="btn btn-success" (click)="toggleLike()"> {{liked? 'Unlike' : 'Like'}}</a>
+            </div>
+            &nbsp; &nbsp; &nbsp; &nbsp;
+            <div>
+                <a class="btn btn-success" (click)="toggleReadlater()">{{readlater? 'Remove' : 'Read later'}}</a>
+            </div>
+        </div>
+       
+      </div>
+      <!-- Grid column -->
+      
+  
+    </div>
+    <!-- Grid row -->
+    
+  
+  </div>
+  <!-- News jumbotron -->

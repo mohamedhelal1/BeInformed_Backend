@@ -1,0 +1,32 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">BeInformed</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarColor01">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" routerLink="/"> Articles </a>
+        </li>
+        <li *ngIf="authService.loggedIn()"class="nav-item">
+          <a class="nav-link" routerLink="/readlater">Read later</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/cases">Corona Cases</a>
+        </li>
+      </ul>
+      <form  class="form-inline my-2 my-lg-0">
+        <div *ngIf="!authService.loggedIn()" >
+          <button  type="button" class="btn btn-success" routerLink="/login">Login</button>
+          &nbsp; &nbsp;
+          <button  type="button" class="btn btn-success" routerLink="/register">Register</button>
+        </div>
+        <form class="form-inline my-2 my-lg-0"> 
+          <div *ngIf="authService.loggedIn()" >
+            <button ng-show="authenticated" type="button" class="btn btn-success" (click)="logout()">Logut</button>
+          </div>
+        </form>
+      </form>
+    </div>
+  </nav>

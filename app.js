@@ -25,6 +25,9 @@ app.use(cors());
 // match requests to defined routes
 app.use('/',routes);
 
+
+app.use(express.static('public'));
+
 /* 
   Middleware to handle any (404 Not Found) error that may occur if the request didn't find
   a matching route on our server, or the requested data could not be found in the database
