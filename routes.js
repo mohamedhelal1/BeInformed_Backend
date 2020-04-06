@@ -11,7 +11,7 @@ var isAuthenticated = (req, res, next)=> {
     if (!token) {
         return res.status(401).json({
             error: null,
-            msg: 'You have to login first.',
+            message: 'You have to login first.',
             data: null
         });
     }
@@ -20,7 +20,7 @@ var isAuthenticated = (req, res, next)=> {
         if (err) {
             return res.status(401).json({
                 error: err,
-                msg: 'Login timed out, please login again.',
+                message: 'Login timed out, please login again.',
                 data: null
             });
         }
@@ -39,7 +39,7 @@ var isNotAuthenticated = (req, res, next) => {
             if (!err) {
                 return res.status(401).json({
                     error: err,
-                    msg: 'You are already logged in.',
+                    message: 'You are already logged in.',
                     data: null
                 });
             }
@@ -60,4 +60,6 @@ router.get('/user/getreadlater',isAuthenticated, userCtrl.getreadlater);
 router.get('/articles/:page',isNotAuthenticated, articleCtrl.getarticles);
 router.get('/articles/auth/:page',isAuthenticated, articleCtrl.authgetarticles);
 router.put('/articles/liketoggle/:articleId',isAuthenticated, articleCtrl.liketoggle);
+
+
 module.exports = router;

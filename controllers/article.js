@@ -4,7 +4,7 @@ module.exports.authgetarticles = (req,res,next)=>{
     if( !req.params.page)
         return res.status(422).json({
             err: null,
-            msg:
+            message:
                 'page is not valid',
             data: null
         });
@@ -33,7 +33,7 @@ module.exports.authgetarticles = (req,res,next)=>{
             const pages = result.totalPages;
             res.status(200).json({
                 err: null,
-                msg: 'Articles retrieved successfully',
+                message: 'Articles retrieved successfully',
                 data: {articles,pages}
             });
         });
@@ -43,7 +43,7 @@ module.exports.getarticles = (req,res,next)=>{
     if( !req.params.page)
         return res.status(422).json({
             err: null,
-            msg:
+            message:
                 'page is not valid',
             data: null
         });
@@ -59,7 +59,7 @@ module.exports.getarticles = (req,res,next)=>{
             return next(err);
         res.status(200).json({
             err: null,
-            msg: 'Articles retrieved successfully',
+            message: 'Articles retrieved successfully',
             data: {
                     articles : result.docs,
                     pages : result.totalPages
@@ -72,7 +72,7 @@ module.exports.liketoggle = (req,res,next)=>{
     if( !req.params.articleId)
         return res.status(422).json({
             err: null,
-            msg:
+            message:
                 'there must be an articleId',
             data: null
     });
@@ -82,7 +82,7 @@ module.exports.liketoggle = (req,res,next)=>{
         if(!article)
             return res.status(404).json({
                 err: null,
-                msg:
+                message:
                     'article not found',
                 data: null
              });
@@ -93,7 +93,7 @@ module.exports.liketoggle = (req,res,next)=>{
                         return next(err);
                     return res.status(200).json({
                         err: null,
-                        msg: 'Article liked',
+                        message: 'Article liked',
                         data: null
                     });
                 }
@@ -106,7 +106,7 @@ module.exports.liketoggle = (req,res,next)=>{
                         return next(err);
                     return res.status(200).json({
                         err: null,
-                        msg: 'Article unliked',
+                        message: 'Article unliked',
                         data: null
                     });
                 }

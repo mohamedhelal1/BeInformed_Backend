@@ -15,7 +15,7 @@ cron.schedule('*/10 * * * *', ()=> {
     }).then(response => {
         const articles = response.articles;
         articles.forEach(article =>{
-            const{source,title,url,urlToImage,publishedAt}=article;
+            const{source,title,url,urlToImage,publishedAt,description}=article;
             Article.findOne({url:url}).exec((err,article)=>{
                 if(err){
                     console.log(err.message);
@@ -27,6 +27,7 @@ cron.schedule('*/10 * * * *', ()=> {
                             title : title,
                             url : url,
                             urlToImage : urlToImage,
+                            description : description,
                             date:Date.parse(publishedAt),
                             likes:[]
                         };

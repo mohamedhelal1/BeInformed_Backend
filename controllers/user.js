@@ -13,7 +13,7 @@ module.exports.register = (req,res,next) => {
     if(!firstname||!lastname || !email || !password || !confirmPassword){
         return res.status(422).json({
             err: null,
-            msg:'firstname, lastname, email, password and confirmPassword are required fields.',
+            message:'firstname, lastname, email, password and confirmPassword are required fields.',
             data: null
         });
     }
@@ -25,7 +25,7 @@ module.exports.register = (req,res,next) => {
     if(!valid){
         return res.status(422).json({
             err: null,
-            msg:
+            message:
                 'one of the fields is not valid',
             data: null
         });
@@ -33,21 +33,21 @@ module.exports.register = (req,res,next) => {
     if(!config.EMAIL_REGEX.test(email)){
         return res.status(422).json({
             err: null,
-            msg:'Incorrect email format',
+            message:'Incorrect email format',
             data: null
         });
     }
     if(password !== confirmPassword){
         return res.status(422).json({
             err: null,
-            msg: 'password and confirmPassword does not match.',
+            message: 'password and confirmPassword do not match.',
             data: null
         });
     }
     if(password.length < 6){
         return res.status(422).json({
             err: null,
-            msg: 'Password must be of length 6 characters or more.',
+            message: 'Password must be of length 6 characters or more.',
             data: null
         });
     }
@@ -59,7 +59,7 @@ module.exports.register = (req,res,next) => {
         if(user){
             return res.status(422).json({
                 err: null,
-                msg:
+                message:
                   'A user with this email address already exists, please login.',
                 data: null
             });
@@ -85,7 +85,7 @@ module.exports.register = (req,res,next) => {
                         return next(err);
                     return res.status(201).json({
                         err: null,
-                        msg: 'Registration successful, you can now login to your account.',
+                        message: 'Registration successful, you can now login to your account.',
                         data: user.toObject()
                     });
                 });
@@ -102,7 +102,7 @@ module.exports.login = (req,res,next) => {
     if(!email || !password){
         return res.status(422).json({
             err: null,
-            msg:'email and password are required fields.',
+            message:'email and password are required fields.',
             data: null
         });
     }
@@ -111,7 +111,7 @@ module.exports.login = (req,res,next) => {
     if(!valid){
         return res.status(422).json({
             err: null,
-            msg:
+            message:
                 'one of the fields is not valid',
             data: null
         });
@@ -119,7 +119,7 @@ module.exports.login = (req,res,next) => {
     if(!config.EMAIL_REGEX.test(email)){
         return res.status(422).json({
             err: null,
-            msg:'Incorrect email format',
+            message:'Incorrect email format',
             data: null
         });
     }
@@ -130,14 +130,14 @@ module.exports.login = (req,res,next) => {
         if(!user){
             return res.status(404).json({
                 err: null,
-                msg: 'this email is not registered',
+                message: 'this email is not registered',
                 data: null
             });
         }
         if(!user.password){
             return res.status(401).json({
                 err: null,
-                msg: 'please sign in with your google account and create a password',
+                message: 'please sign in with your google account and create a password',
                 data: null
             });
         }
@@ -147,12 +147,12 @@ module.exports.login = (req,res,next) => {
             if(!isMatch){
                 return res.status(401).json({ 
                     err: null,
-                    msg: 'Password is incorrect.', 
+                    message: 'Password is incorrect.', 
                     data: null 
                 });
             }
             var token = jwt.sign({user: user.toObject()},req.app.get('secret'),{expiresIn: '12h'});
-            res.status(200).json({ err: null, msg: 'logged in', data: {token} });
+            res.status(200).json({ err: null, message: 'logged in', data: {token} });
         });
     });
 }
@@ -173,7 +173,7 @@ module.exports.googlelogin=(req,res,next)=>{
                 return next(err);
             if(user){
                 var token = jwt.sign({user: user.toObject()},req.app.get('secret'),{expiresIn: '12h'});
-                res.status(200).json({ err: null, msg: 'logged in', data: token });
+                res.status(200).json({ err: null, message: 'logged in', data: {token} });
             }
             else{
                 const newUser = new User({
@@ -188,7 +188,7 @@ module.exports.googlelogin=(req,res,next)=>{
                     if (err)
                         return next(err);
                     var token = jwt.sign({user: user.toObject()},req.app.get('secret'),{expiresIn: '12h'});
-                    return res.status(201).json({ err: null, msg: 'logged in', data: {token} });
+                    return res.status(201).json({ err: null, message: 'logged in', data: {token} });
                 });
             }
         });
@@ -198,7 +198,7 @@ module.exports.togglereadlater= (req,res,next)=>{
     if( !req.params.articleId)
         return res.status(422).json({
             err: null,
-            msg:
+            message:
                 'there must be an articleId',
             data: null
     });
@@ -208,7 +208,7 @@ module.exports.togglereadlater= (req,res,next)=>{
         if(!article)
             return res.status(404).json({
                 err: null,
-                msg:
+                message:
                     'article not found',
                 data: null
              });
@@ -222,7 +222,7 @@ module.exports.togglereadlater= (req,res,next)=>{
                             return next(err);
                         return res.status(200).json({
                             err: null,
-                            msg: 'Article added',
+                            message: 'Article added',
                             data: null
                         });
                     }
@@ -235,7 +235,7 @@ module.exports.togglereadlater= (req,res,next)=>{
                             return next(err);
                         return res.status(200).json({
                             err: null,
-                            msg: 'Article removed',
+                            message: 'Article removed',
                             data: null
                         });
                     }
@@ -252,9 +252,15 @@ module.exports.getreadlater = (req,res,next)=>{
         Article.find({_id:{$in:user.readLater}},(err,articles)=>{
             if(err)
                 return next(err);
+                for(var index in articles){
+                    const article = articles[index]._doc;
+                    const liked = articles[index].likes.includes(user._id);
+                    const readlater = true;
+                    articles[index]= {...article,liked,readlater};
+                }
             return res.status(200).json({
                 err: null,
-                msg: 'Articles retrieved successfully',
+                message: 'Articles retrieved successfully',
                 data: articles
             });
         });

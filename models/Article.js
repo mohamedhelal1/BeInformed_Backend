@@ -15,6 +15,10 @@ const ArticleSchema = new mongoose.Schema({
         required : true,
         unique : true
     },
+    description:{
+        type : String,
+        required : true,
+    },
     urlToImage :{
         type : String
     },

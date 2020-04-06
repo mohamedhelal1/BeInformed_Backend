@@ -4,11 +4,14 @@ const helmet = require('helmet');
 const compression = require('compression');
 const routes = require('./routes');
 const config = require('./Config');
+const cors = require('cors')
+const morgan = require('morgan');
 const app = express();
 require('./server/newsapi');
 //secret for authentication
 app.set('secret', config.SECRET);
 // Middleware to protect the server against common known security vulnerabilities
+app.use(morgan('dev'))
 app.use(helmet());
 
 // Middleware to compress the server json responses to be smaller in size
@@ -18,6 +21,7 @@ app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({extended : false}));
 
+app.use(cors());
 // match requests to defined routes
 app.use('/',routes);
 
@@ -28,7 +32,7 @@ app.use('/',routes);
 app.use((req, res) =>{
     res.status(404).json({
         err: null,
-        msg: '404 Not Found',
+        message: '404 Not Found',
         data: null
     });
 });
@@ -38,7 +42,7 @@ app.use((err, req, res, next)=> {
     res.status(500).json({
         // Never leak the stack trace of the err if running in production mode
         err: process.env.NODE_ENV === 'production' ? null : err,
-        msg: '500 Internal Server Error',
+        message: '500 Internal Server Error',
         data: null
     });
 });
