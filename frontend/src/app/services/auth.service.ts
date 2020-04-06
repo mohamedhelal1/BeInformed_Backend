@@ -13,7 +13,6 @@ export class AuthService {
   jwtHelper:any;
   headers; any;
   constructor(private http: HttpClient,private router:Router) {
-     // this.isDev = true;  // Change to false before deployment
      this.headers = new HttpHeaders({'Content-Type': 'application/json'});
      this.url='';
      this.jwtHelper = new JwtHelperService();
@@ -29,13 +28,6 @@ export class AuthService {
     return this.http.post<Response>(this.url+'/user/login', user, {headers: this.headers})
   }
 
- /* getProfile() {
-    this.loadToken();
-    headers.append('Authorization', this.authToken);
-    return this.http.get('users/profile', {headers: headers})
-      .map(res => res.json());
-  }*/
-
   storeUserData(token) {
     localStorage.setItem('authentication', token);
   }
@@ -45,7 +37,6 @@ export class AuthService {
   }
   loggedIn() {
     
-     // console.log(localStorage.getItem('authentication'));
       return !this.jwtHelper.isTokenExpired(this.loadToken());
     
   }

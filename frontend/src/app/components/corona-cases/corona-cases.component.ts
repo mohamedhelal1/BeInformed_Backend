@@ -35,10 +35,10 @@ export class CoronaCasesComponent implements OnInit {
       if(res){
         var deaths = [];
         var confirmed = [];
-        for (let index in res.data) {
-            deaths[index]= res.data[index].deaths;
-            confirmed[index]= res.data[index].confirmed;
-            this.lineChartLabels[index]=res.data[index].date
+        for (var index = 1 ; index < res.data.length;index++) {
+            deaths[index] = res.data[res.data.length-1-index].deaths;
+            confirmed[index] = res.data[res.data.length-1-index].confirmed;
+            this.lineChartLabels[index] = res.data[res.data.length-1-index].date;
         }
         this.lineChartData = [
           { data: deaths, label: 'Deaths' },

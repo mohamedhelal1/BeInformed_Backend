@@ -90,11 +90,9 @@ export class RegisterComponent implements OnInit {
         //YOUR CODE HERE
         this.authService.registerGoogle(googleUser.getAuthResponse().id_token).subscribe(
           (res) => {
-            console.log(res);
             this.authService.storeUserData(res.data.token);
             this.router.navigate(['/']);
           }, (err) => {
-            console.log(err);
             this.router.navigate(['/login']);
           });  
 
