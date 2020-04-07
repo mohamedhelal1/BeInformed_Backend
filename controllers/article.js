@@ -13,7 +13,8 @@ module.exports.authgetarticles = (req,res,next)=>{
         limit: 10,
         collation: {
           locale: 'en'
-        }
+        },
+        sort:{ date: -1 }
     },
     (err,result)=>{
         if(err) {
@@ -52,7 +53,8 @@ module.exports.getarticles = (req,res,next)=>{
         limit: 10,
         collation: {
           locale: 'en'
-        }
+        },
+        sort:{ date: -1 }
     },
     (err,result)=>{
         if(err)
